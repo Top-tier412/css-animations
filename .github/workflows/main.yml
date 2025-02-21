@@ -1,0 +1,49 @@
+name: Sync PRs, Issues, and Reviews  
+
+on:  
+  schedule:  
+    - cron: '0 0 * * *' # Runs daily at midnight  
+  workflow_dispatch: # Allows manual triggering  
+
+jobs:  
+  sync:  
+    runs-on: ubuntu-latest  
+    steps:  
+      - name: Checkout repository  
+        uses: actions/checkout@v3  
+
+      - name: Sync PRs, Issues, and Reviews  
+        uses: actions/github-script@v6  
+        with:  
+          script: |  
+            const { data: prs } = await github.rest.pulls.list({  
+              owner: 'emmabostian',  
+              repo: 'https://github.com/emmabostian/css-animations.git',  
+              state: 'all',  
+            });  
+
+            const { data: issues } = await github.rest.issues.listForRepo({  
+              owner: 'emmabostian',  
+              repo: 'https://github.com/emmabostian/css-animations.git',  
+              state: 'all',  
+            });  
+
+            for (const pr of prs) {  
+              await github.rest.pulls.create({  
+                owner: 'Top-tier412',  
+                repo: 'https://github.com/Top-tier412/css-animations.git',  
+                title: pr.title,  
+                head: pr.head.ref,  
+                base: pr.base.ref,  
+                body: pr.body,  
+              });  
+            }  
+
+            for (const issue of issues) {  
+              await github.rest.issues.create({  
+                owner: 'Top-tier412',  
+                repo: 'https://github.com/Top-tier412/css-animations.git',  
+                title: issue.title,  
+                body: issue.body,  
+              });  
+            }
