@@ -18,20 +18,20 @@ jobs:
           script: |  
             const { data: prs } = await github.rest.pulls.list({  
               owner: 'emmabostian',  
-              repo: 'https://github.com/emmabostian/css-animations.git',  
+              repo: 'css-animations',  
               state: 'all',  
             });  
 
             const { data: issues } = await github.rest.issues.listForRepo({  
               owner: 'emmabostian',  
-              repo: 'https://github.com/emmabostian/css-animations.git',  
+              repo: 'css-animations',  
               state: 'all',  
             });  
 
             for (const pr of prs) {  
               await github.rest.pulls.create({  
                 owner: 'Top-tier412',  
-                repo: 'https://github.com/Top-tier412/css-animations.git',  
+                repo: 'css-animations',  
                 title: pr.title,  
                 head: pr.head.ref,  
                 base: pr.base.ref,  
@@ -42,7 +42,7 @@ jobs:
             for (const issue of issues) {  
               await github.rest.issues.create({  
                 owner: 'Top-tier412',  
-                repo: 'https://github.com/Top-tier412/css-animations.git',  
+                repo: 'css-animations',  
                 title: issue.title,  
                 body: issue.body,  
               });  
